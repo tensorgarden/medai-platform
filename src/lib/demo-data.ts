@@ -563,6 +563,14 @@ export const clinicalNotes: ClinicalNote[] = [
     followUpNeeded: true,
     followUpDate: "2026-07-01",
     status: "draft",
+    aiSafetyReview: {
+      riskLevel: "high",
+      clinicianEdited: false,
+      errorReportStatus: "queued",
+      sourceAnchors: ["Transcript: CAT score 18", "Transcript: FEV1 55% predicted"],
+      reviewNote:
+        "Draft contains therapy escalation and pulmonary rehab guidance; require clinician verification before signing to catch possible ambient-scribe hallucinations.",
+    },
     createdAt: "2026-06-02",
   },
   {
@@ -581,6 +589,14 @@ export const clinicalNotes: ClinicalNote[] = [
     followUpNeeded: true,
     followUpDate: "2026-07-09",
     status: "draft",
+    aiSafetyReview: {
+      riskLevel: "moderate",
+      clinicianEdited: false,
+      errorReportStatus: "queued",
+      sourceAnchors: ["Transcript: fetal heart rate 148 bpm", "Transcript: Hgb 10.8"],
+      reviewNote:
+        "Prenatal summary is queued for sign-off because labs and follow-up timing should be reconciled against source transcript anchors.",
+    },
     createdAt: "2026-06-09",
   },
   {

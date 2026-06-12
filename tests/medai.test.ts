@@ -77,6 +77,21 @@ describe("Clinical Notes", () => {
     ).length;
     expect(finalized).toBeGreaterThan(drafts);
   });
+
+  it("draft notes with safety risk should require anchored clinician review", () => {
+    const riskReviews = clinicalNotes.flatMap((n: ClinicalNote) =>
+      n.aiSafetyReview ? [{ status: n.status, ...n.aiSafetyReview }] : []
+    );
+
+    expect(riskReviews.length).toBeGreaterThanOrEqual(2);
+    for (const review of riskReviews) {
+      expect(review.status).toBe("draft");
+      expect(review.clinicianEdited).toBe(false);
+      expect(review.errorReportStatus).toBe("queued");
+      expect(review.sourceAnchors.length).toBeGreaterThanOrEqual(2);
+      expect(review.reviewNote).toMatch(/clinician|sign-off|verification/i);
+    }
+  });
 });
 
 // 4. Prescriptions

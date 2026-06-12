@@ -46,7 +46,16 @@ export interface ClinicalNote {
   followUpNeeded: boolean;
   followUpDate: string | null;
   status: "draft" | "reviewed" | "finalized";
+  aiSafetyReview?: AiClinicalSafetyReview;
   createdAt: string;
+}
+
+export interface AiClinicalSafetyReview {
+  riskLevel: "low" | "moderate" | "high";
+  clinicianEdited: boolean;
+  errorReportStatus: "not-needed" | "queued" | "reported";
+  sourceAnchors: string[];
+  reviewNote: string;
 }
 
 export interface IntakeForm {
