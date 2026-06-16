@@ -92,6 +92,19 @@ describe("Clinical Notes", () => {
       expect(review.reviewNote).toMatch(/clinician|sign-off|verification/i);
     }
   });
+
+  it("every draft note should carry an AI safety review before clinician sign-off", () => {
+    const draftNotes = clinicalNotes.filter(
+      (n: ClinicalNote) => n.status === "draft"
+    );
+    expect(draftNotes.length).toBeGreaterThanOrEqual(3);
+    for (const note of draftNotes) {
+      expect(note.aiSafetyReview).toBeDefined();
+      expect(note.aiSafetyReview!.riskLevel).toMatch(/low|moderate|high/);
+      expect(note.aiSafetyReview!.clinicianEdited).toBe(false);
+      expect(note.aiSafetyReview!.sourceAnchors.length).toBeGreaterThanOrEqual(2);
+    }
+  });
 });
 
 // 4. Prescriptions

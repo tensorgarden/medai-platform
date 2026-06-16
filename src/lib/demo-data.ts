@@ -615,6 +615,17 @@ export const clinicalNotes: ClinicalNote[] = [
     followUpNeeded: true,
     followUpDate: "2026-07-18",
     status: "draft",
+    aiSafetyReview: {
+      riskLevel: "moderate",
+      clinicianEdited: false,
+      errorReportStatus: "queued",
+      sourceAnchors: [
+        "Transcript: GERD symptoms worsening in evening",
+        "Transcript: add famotidine 20mg at bedtime",
+      ],
+      reviewNote:
+        "Telehealth note recommends new medication (famotidine) and PPI continuation; require clinician sign-off to verify dosing against source transcript and patient history before finalizing.",
+    },
     createdAt: "2026-06-06",
   },
 ];
