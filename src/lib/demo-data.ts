@@ -996,4 +996,14 @@ export const metrics: HealthcareMetric[] = [
     trend: "up",
     updatedAt: "2026-06-09",
   },
+  {
+    id: "m07",
+    label: "Provider Edit Rate",
+    value: 28,
+    unit: "%",
+    change: -4.3,
+    period: "month",
+    trend: "down",
+    updatedAt: "2026-06-09",
+  },
 ];

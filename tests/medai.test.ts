@@ -146,8 +146,8 @@ describe("Intake Forms", () => {
 
 // 6. Metrics
 describe("Clinic Metrics", () => {
-  it("should have exactly 6 healthcare metrics", () => {
-    expect(metrics).toHaveLength(6);
+  it("should have exactly 7 healthcare metrics", () => {
+    expect(metrics).toHaveLength(7);
   });
 
   it("active patients metric should be above 2000", () => {
@@ -164,6 +164,18 @@ describe("Clinic Metrics", () => {
     );
     expect(waitMetric).toBeDefined();
     expect(waitMetric!.value).toBeLessThan(30);
+  });
+
+  it("provider edit rate should be present and show month-over-month trend", () => {
+    const editRateMetric = metrics.find(
+      (m: HealthcareMetric) => m.label === "Provider Edit Rate"
+    );
+    expect(editRateMetric).toBeDefined();
+    expect(editRateMetric!.value).toBeGreaterThan(0);
+    expect(editRateMetric!.value).toBeLessThan(100);
+    expect(editRateMetric!.unit).toBe("%");
+    expect(editRateMetric!.period).toBe("month");
+    expect(editRateMetric!.trend).toMatch(/up|down|stable/);
   });
 });
 
