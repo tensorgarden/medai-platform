@@ -567,7 +567,20 @@ export const clinicalNotes: ClinicalNote[] = [
       riskLevel: "high",
       clinicianEdited: false,
       errorReportStatus: "queued",
-      sourceAnchors: ["Transcript: CAT score 18", "Transcript: FEV1 55% predicted"],
+      sourceAnchors: [
+        {
+          sourceType: "transcript",
+          speaker: "patient",
+          timestamp: "00:03:18",
+          snippet: "Reports increased shortness of breath on exertion",
+        },
+        {
+          sourceType: "transcript",
+          speaker: "clinician",
+          timestamp: "00:09:42",
+          snippet: "CAT score documented as 18; FEV1 55% predicted",
+        },
+      ],
       reviewNote:
         "Draft contains therapy escalation and pulmonary rehab guidance; require clinician verification before signing to catch possible ambient-scribe hallucinations.",
     },
@@ -593,7 +606,18 @@ export const clinicalNotes: ClinicalNote[] = [
       riskLevel: "moderate",
       clinicianEdited: false,
       errorReportStatus: "queued",
-      sourceAnchors: ["Transcript: fetal heart rate 148 bpm", "Transcript: Hgb 10.8"],
+      sourceAnchors: [
+        {
+          sourceType: "vitals",
+          timestamp: "00:04:05",
+          snippet: "Fetal heart rate 148 bpm and fundal height 22 cm",
+        },
+        {
+          sourceType: "lab-result",
+          timestamp: "pre-visit labs",
+          snippet: "Hemoglobin 10.8 supports iron-deficiency follow-up",
+        },
+      ],
       reviewNote:
         "Prenatal summary is queued for sign-off because labs and follow-up timing should be reconciled against source transcript anchors.",
     },
@@ -620,8 +644,18 @@ export const clinicalNotes: ClinicalNote[] = [
       clinicianEdited: false,
       errorReportStatus: "queued",
       sourceAnchors: [
-        "Transcript: GERD symptoms worsening in evening",
-        "Transcript: add famotidine 20mg at bedtime",
+        {
+          sourceType: "transcript",
+          speaker: "patient",
+          timestamp: "00:02:11",
+          snippet: "GERD symptoms worsening in the evening",
+        },
+        {
+          sourceType: "transcript",
+          speaker: "clinician",
+          timestamp: "00:13:27",
+          snippet: "Famotidine 20mg at bedtime discussed with ongoing PPI",
+        },
       ],
       reviewNote:
         "Telehealth note recommends new medication (famotidine) and PPI continuation; require clinician sign-off to verify dosing against source transcript and patient history before finalizing.",

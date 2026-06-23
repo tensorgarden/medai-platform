@@ -105,6 +105,24 @@ describe("Clinical Notes", () => {
       expect(note.aiSafetyReview!.sourceAnchors.length).toBeGreaterThanOrEqual(2);
     }
   });
+
+  it("AI safety anchors should preserve source provenance for audit review", () => {
+    const riskReviews = clinicalNotes.flatMap((n: ClinicalNote) =>
+      n.aiSafetyReview ? [n.aiSafetyReview] : []
+    );
+
+    for (const review of riskReviews) {
+      for (const anchor of review.sourceAnchors) {
+        expect(["transcript", "lab-result", "vitals"]).toContain(anchor.sourceType);
+        expect(anchor.timestamp.length).toBeGreaterThanOrEqual(5);
+        expect(anchor.snippet.length).toBeGreaterThan(20);
+        if (anchor.sourceType === "transcript") {
+          expect(anchor.timestamp).toMatch(/^\d{2}:\d{2}:\d{2}$/);
+          expect(anchor.speaker).toMatch(/patient|clinician|caregiver/);
+        }
+      }
+    }
+  });
 });
 
 // 4. Prescriptions

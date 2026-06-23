@@ -54,8 +54,15 @@ export interface AiClinicalSafetyReview {
   riskLevel: "low" | "moderate" | "high";
   clinicianEdited: boolean;
   errorReportStatus: "not-needed" | "queued" | "reported";
-  sourceAnchors: string[];
+  sourceAnchors: ClinicalSourceAnchor[];
   reviewNote: string;
+}
+
+export interface ClinicalSourceAnchor {
+  sourceType: "transcript" | "lab-result" | "vitals";
+  speaker?: "patient" | "clinician" | "caregiver";
+  timestamp: string;
+  snippet: string;
 }
 
 export interface IntakeForm {
