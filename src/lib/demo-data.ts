@@ -567,6 +567,7 @@ export const clinicalNotes: ClinicalNote[] = [
       riskLevel: "high",
       clinicianEdited: false,
       errorReportStatus: "queued",
+      qualityConcerns: ["unsupported-recommendation", "note-bloat"],
       sourceAnchors: [
         {
           sourceType: "transcript",
@@ -606,6 +607,7 @@ export const clinicalNotes: ClinicalNote[] = [
       riskLevel: "moderate",
       clinicianEdited: false,
       errorReportStatus: "queued",
+      qualityConcerns: ["possible-omission"],
       sourceAnchors: [
         {
           sourceType: "vitals",
@@ -643,6 +645,7 @@ export const clinicalNotes: ClinicalNote[] = [
       riskLevel: "moderate",
       clinicianEdited: false,
       errorReportStatus: "queued",
+      qualityConcerns: ["unsupported-recommendation"],
       sourceAnchors: [
         {
           sourceType: "transcript",

@@ -123,6 +123,29 @@ describe("Clinical Notes", () => {
       }
     }
   });
+
+  it("AI safety reviews should label ambient-scribe note quality concerns", () => {
+    const riskReviews = clinicalNotes.flatMap((n: ClinicalNote) =>
+      n.aiSafetyReview ? [n.aiSafetyReview] : []
+    );
+    const concerns = riskReviews.flatMap((review) => review.qualityConcerns);
+
+    expect(concerns).toContain("possible-omission");
+    expect(concerns).toContain("note-bloat");
+    expect(concerns).toContain("unsupported-recommendation");
+
+    for (const review of riskReviews) {
+      expect(review.qualityConcerns.length).toBeGreaterThan(0);
+      for (const concern of review.qualityConcerns) {
+        expect([
+          "possible-omission",
+          "note-bloat",
+          "unsupported-recommendation",
+          "source-conflict",
+        ]).toContain(concern);
+      }
+    }
+  });
 });
 
 // 4. Prescriptions

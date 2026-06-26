@@ -50,10 +50,17 @@ export interface ClinicalNote {
   createdAt: string;
 }
 
+export type ClinicalNoteQualityConcern =
+  | "possible-omission"
+  | "note-bloat"
+  | "unsupported-recommendation"
+  | "source-conflict";
+
 export interface AiClinicalSafetyReview {
   riskLevel: "low" | "moderate" | "high";
   clinicianEdited: boolean;
   errorReportStatus: "not-needed" | "queued" | "reported";
+  qualityConcerns: ClinicalNoteQualityConcern[];
   sourceAnchors: ClinicalSourceAnchor[];
   reviewNote: string;
 }
