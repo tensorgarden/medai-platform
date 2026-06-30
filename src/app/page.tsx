@@ -12,6 +12,12 @@ import { ProgressBar } from "@/components/ui/progress-bar";
 import { StatusDot } from "@/components/ui/status-dot";
 import { StatCard } from "@/components/ui/stat-card";
 
+function safetyRiskVariant(riskLevel: "low" | "moderate" | "high") {
+  if (riskLevel === "high") return "danger";
+  if (riskLevel === "moderate") return "warning";
+  return "info";
+}
+
 export default function HomePage() {
   const activePatients = patients.filter((p) => p.status === "active").length;
   const todayAppointments = appointments.filter(
@@ -23,6 +29,11 @@ export default function HomePage() {
   const activePrescriptions = prescriptions.filter(
     (r) => r.status === "active"
   ).length;
+  const safetyQueue = clinicalNotes.filter((note) => note.aiSafetyReview);
+  const safetyReviewTasks = safetyQueue.reduce(
+    (total, note) => total + (note.aiSafetyReview?.reviewTasks.length ?? 0),
+    0
+  );
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -222,6 +233,44 @@ export default function HomePage() {
                 +{clinicalNotes.length - 5} more notes
               </p>
             )}
+          </Card>
+
+          {/* AI Safety Review Queue */}
+          <Card>
+            <CardHeader>
+              <CardTitle>AI Safety Review Queue</CardTitle>
+              <Badge variant="warning">{safetyReviewTasks} tasks</Badge>
+            </CardHeader>
+            <ul className="divide-y divide-gray-50">
+              {safetyQueue.map((note) => {
+                const review = note.aiSafetyReview!;
+                const leadTask = review.reviewTasks[0];
+
+                return (
+                  <li key={note.id} className="py-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-sm font-medium text-ink">
+                          {note.patientName}
+                        </p>
+                        <p className="mt-0.5 text-xs text-gray-400">
+                          {review.qualityConcerns.join(" · ")}
+                        </p>
+                      </div>
+                      <Badge variant={safetyRiskVariant(review.riskLevel)}>
+                        {review.riskLevel} risk
+                      </Badge>
+                    </div>
+                    <p className="mt-2 text-xs leading-relaxed text-gray-500">
+                      {leadTask.note}
+                    </p>
+                    <p className="mt-1 text-xs font-medium text-amber-700">
+                      {review.reviewTasks.length} checks due before sign-off
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
           </Card>
 
           {/* Prescription Tracker */}

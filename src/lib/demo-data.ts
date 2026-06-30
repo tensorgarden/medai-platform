@@ -582,6 +582,26 @@ export const clinicalNotes: ClinicalNote[] = [
           snippet: "CAT score documented as 18; FEV1 55% predicted",
         },
       ],
+      reviewTasks: [
+        {
+          taskType: "confirm-medication-change",
+          owner: "clinician",
+          dueBeforeSignoff: true,
+          note: "Confirm tiotropium adjustment and as-needed albuterol plan before COPD draft is signed.",
+        },
+        {
+          taskType: "verify-source-evidence",
+          owner: "scribe-reviewer",
+          dueBeforeSignoff: true,
+          note: "Compare pulmonary rehab recommendation against transcript anchors and visit findings.",
+        },
+        {
+          taskType: "patient-safety-escalation",
+          owner: "care-team",
+          dueBeforeSignoff: true,
+          note: "Escalate if oxygen-use history conflicts with the generated treatment escalation plan.",
+        },
+      ],
       reviewNote:
         "Draft contains therapy escalation and pulmonary rehab guidance; require clinician verification before signing to catch possible ambient-scribe hallucinations.",
     },
@@ -618,6 +638,20 @@ export const clinicalNotes: ClinicalNote[] = [
           sourceType: "lab-result",
           timestamp: "pre-visit labs",
           snippet: "Hemoglobin 10.8 supports iron-deficiency follow-up",
+        },
+      ],
+      reviewTasks: [
+        {
+          taskType: "resolve-omission",
+          owner: "clinician",
+          dueBeforeSignoff: true,
+          note: "Confirm glucose tolerance timing and anemia follow-up are not missing from the prenatal plan.",
+        },
+        {
+          taskType: "verify-source-evidence",
+          owner: "scribe-reviewer",
+          dueBeforeSignoff: true,
+          note: "Reconcile fetal heart rate and hemoglobin anchors against the encounter and lab record.",
         },
       ],
       reviewNote:
@@ -658,6 +692,20 @@ export const clinicalNotes: ClinicalNote[] = [
           speaker: "clinician",
           timestamp: "00:13:27",
           snippet: "Famotidine 20mg at bedtime discussed with ongoing PPI",
+        },
+      ],
+      reviewTasks: [
+        {
+          taskType: "confirm-medication-change",
+          owner: "clinician",
+          dueBeforeSignoff: true,
+          note: "Validate famotidine addition against medication history and ongoing PPI use before signing.",
+        },
+        {
+          taskType: "verify-source-evidence",
+          owner: "scribe-reviewer",
+          dueBeforeSignoff: true,
+          note: "Check GERD symptom timing and dosing details against the transcript anchors.",
         },
       ],
       reviewNote:

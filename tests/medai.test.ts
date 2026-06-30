@@ -146,6 +146,47 @@ describe("Clinical Notes", () => {
       }
     }
   });
+
+  it("AI safety reviews should carry pre-signoff review tasks", () => {
+    const riskReviews = clinicalNotes.flatMap((n: ClinicalNote) =>
+      n.aiSafetyReview ? [n.aiSafetyReview] : []
+    );
+
+    for (const review of riskReviews) {
+      expect(review.reviewTasks.length).toBeGreaterThanOrEqual(2);
+      expect(review.reviewTasks.some((task) => task.owner === "clinician")).toBe(
+        true
+      );
+      for (const task of review.reviewTasks) {
+        expect([
+          "verify-source-evidence",
+          "resolve-omission",
+          "confirm-medication-change",
+          "patient-safety-escalation",
+        ]).toContain(task.taskType);
+        expect(["clinician", "scribe-reviewer", "care-team"]).toContain(
+          task.owner
+        );
+        expect(task.dueBeforeSignoff).toBe(true);
+        expect(task.note.length).toBeGreaterThan(50);
+      }
+    }
+  });
+
+  it("high-risk safety reviews should surface patient-safety escalation tasks", () => {
+    const highRiskNotes = clinicalNotes.filter(
+      (n: ClinicalNote) => n.aiSafetyReview?.riskLevel === "high"
+    );
+
+    expect(highRiskNotes.length).toBeGreaterThanOrEqual(1);
+    for (const note of highRiskNotes) {
+      const taskTypes = note.aiSafetyReview!.reviewTasks.map(
+        (task) => task.taskType
+      );
+      expect(taskTypes).toContain("patient-safety-escalation");
+      expect(taskTypes).toContain("confirm-medication-change");
+    }
+  });
 });
 
 // 4. Prescriptions

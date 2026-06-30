@@ -56,12 +56,26 @@ export type ClinicalNoteQualityConcern =
   | "unsupported-recommendation"
   | "source-conflict";
 
+export type ClinicalSafetyReviewTaskType =
+  | "verify-source-evidence"
+  | "resolve-omission"
+  | "confirm-medication-change"
+  | "patient-safety-escalation";
+
+export interface ClinicalSafetyReviewTask {
+  taskType: ClinicalSafetyReviewTaskType;
+  owner: "clinician" | "scribe-reviewer" | "care-team";
+  dueBeforeSignoff: boolean;
+  note: string;
+}
+
 export interface AiClinicalSafetyReview {
   riskLevel: "low" | "moderate" | "high";
   clinicianEdited: boolean;
   errorReportStatus: "not-needed" | "queued" | "reported";
   qualityConcerns: ClinicalNoteQualityConcern[];
   sourceAnchors: ClinicalSourceAnchor[];
+  reviewTasks: ClinicalSafetyReviewTask[];
   reviewNote: string;
 }
 
