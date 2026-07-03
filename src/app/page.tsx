@@ -264,6 +264,10 @@ export default function HomePage() {
                     <p className="mt-2 text-xs leading-relaxed text-gray-500">
                       {leadTask.note}
                     </p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Escalation: {review.escalationPath.accountableRole.split("-").join(" ")} by{" "}
+                      {review.escalationPath.escalationDeadline.slice(0, 10)}
+                    </p>
                     <p className="mt-1 text-xs font-medium text-amber-700">
                       {review.reviewTasks.length} checks due before sign-off
                     </p>

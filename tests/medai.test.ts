@@ -187,6 +187,31 @@ describe("Clinical Notes", () => {
       expect(taskTypes).toContain("confirm-medication-change");
     }
   });
+
+  it("routes AI documentation risks to accountable escalation paths", () => {
+    const riskReviews = clinicalNotes.flatMap((n: ClinicalNote) =>
+      n.aiSafetyReview ? [n.aiSafetyReview] : []
+    );
+
+    expect(riskReviews.length).toBeGreaterThanOrEqual(3);
+    for (const review of riskReviews) {
+      expect(review.escalationPath.reason.length).toBeGreaterThan(70);
+      expect(review.escalationPath.escalationDeadline).toMatch(
+        /^2026-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/
+      );
+      expect([
+        "attending-clinician",
+        "clinical-safety-lead",
+        "care-team",
+      ]).toContain(review.escalationPath.accountableRole);
+
+      if (review.riskLevel === "high") {
+        expect(review.escalationPath.accountableRole).not.toBe(
+          "attending-clinician"
+        );
+      }
+    }
+  });
 });
 
 // 4. Prescriptions

@@ -582,6 +582,12 @@ export const clinicalNotes: ClinicalNote[] = [
           snippet: "CAT score documented as 18; FEV1 55% predicted",
         },
       ],
+      escalationPath: {
+        accountableRole: "clinical-safety-lead",
+        escalationDeadline: "2026-06-02T17:00:00Z",
+        reason:
+          "High-risk COPD treatment escalation needs clinical safety lead review before same-day sign-off.",
+      },
       reviewTasks: [
         {
           taskType: "confirm-medication-change",
@@ -640,6 +646,12 @@ export const clinicalNotes: ClinicalNote[] = [
           snippet: "Hemoglobin 10.8 supports iron-deficiency follow-up",
         },
       ],
+      escalationPath: {
+        accountableRole: "attending-clinician",
+        escalationDeadline: "2026-06-09T16:30:00Z",
+        reason:
+          "Prenatal lab reconciliation and next-step timing require attending clinician review before sign-off.",
+      },
       reviewTasks: [
         {
           taskType: "resolve-omission",
@@ -694,6 +706,12 @@ export const clinicalNotes: ClinicalNote[] = [
           snippet: "Famotidine 20mg at bedtime discussed with ongoing PPI",
         },
       ],
+      escalationPath: {
+        accountableRole: "attending-clinician",
+        escalationDeadline: "2026-06-06T15:30:00Z",
+        reason:
+          "Telehealth medication addition requires attending clinician review against medication history before sign-off.",
+      },
       reviewTasks: [
         {
           taskType: "confirm-medication-change",

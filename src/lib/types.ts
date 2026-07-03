@@ -69,12 +69,24 @@ export interface ClinicalSafetyReviewTask {
   note: string;
 }
 
+export type ClinicalSafetyEscalationRole =
+  | "attending-clinician"
+  | "clinical-safety-lead"
+  | "care-team";
+
+export interface ClinicalSafetyEscalationPath {
+  accountableRole: ClinicalSafetyEscalationRole;
+  escalationDeadline: string;
+  reason: string;
+}
+
 export interface AiClinicalSafetyReview {
   riskLevel: "low" | "moderate" | "high";
   clinicianEdited: boolean;
   errorReportStatus: "not-needed" | "queued" | "reported";
   qualityConcerns: ClinicalNoteQualityConcern[];
   sourceAnchors: ClinicalSourceAnchor[];
+  escalationPath: ClinicalSafetyEscalationPath;
   reviewTasks: ClinicalSafetyReviewTask[];
   reviewNote: string;
 }
