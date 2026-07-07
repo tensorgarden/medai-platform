@@ -212,6 +212,37 @@ describe("Clinical Notes", () => {
       }
     }
   });
+
+  it("ties AI note reviews to patient-centered outcome monitoring", () => {
+    const riskNotes = clinicalNotes.filter(
+      (n: ClinicalNote) => n.aiSafetyReview
+    );
+
+    expect(riskNotes.length).toBeGreaterThanOrEqual(3);
+    for (const note of riskNotes) {
+      const monitor = note.aiSafetyReview!.outcomeMonitor;
+
+      expect([
+        "symptom-follow-up",
+        "care-gap-check",
+        "medication-response",
+      ]).toContain(monitor.trackingSignal);
+      expect(["clinician", "care-team", "quality-review"]).toContain(
+        monitor.owner
+      );
+      expect(monitor.dueDate).toMatch(/^2026-\d{2}-\d{2}$/);
+      expect(monitor.expectedEvidence.length).toBeGreaterThanOrEqual(2);
+      expect(monitor.reason).toMatch(/patient|outcome|follow-up|symptom/i);
+
+      for (const evidence of monitor.expectedEvidence) {
+        expect(evidence.length).toBeGreaterThan(55);
+      }
+
+      if (note.aiSafetyReview!.riskLevel === "high") {
+        expect(monitor.owner).not.toBe("quality-review");
+      }
+    }
+  });
 });
 
 // 4. Prescriptions

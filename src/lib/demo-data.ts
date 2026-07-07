@@ -588,6 +588,17 @@ export const clinicalNotes: ClinicalNote[] = [
         reason:
           "High-risk COPD treatment escalation needs clinical safety lead review before same-day sign-off.",
       },
+      outcomeMonitor: {
+        trackingSignal: "symptom-follow-up",
+        owner: "care-team",
+        dueDate: "2026-06-04",
+        expectedEvidence: [
+          "48-hour nurse call documents dyspnea, oxygen use, and rescue inhaler frequency after the draft medication plan.",
+          "Pulmonary rehab referral status is reconciled against the signed discharge instructions.",
+        ],
+        reason:
+          "High-risk ambient-scribe COPD changes need patient-centered symptom follow-up, not only proof that charting time went down.",
+      },
       reviewTasks: [
         {
           taskType: "confirm-medication-change",
@@ -652,6 +663,17 @@ export const clinicalNotes: ClinicalNote[] = [
         reason:
           "Prenatal lab reconciliation and next-step timing require attending clinician review before sign-off.",
       },
+      outcomeMonitor: {
+        trackingSignal: "care-gap-check",
+        owner: "clinician",
+        dueDate: "2026-06-16",
+        expectedEvidence: [
+          "Glucose tolerance test order or scheduled reminder is visible in the prenatal care plan.",
+          "Repeat anemia follow-up is tied to hemoglobin trend and iron-supplement counseling.",
+        ],
+        reason:
+          "Prenatal ambient notes should prove recommended follow-up gaps are closed, not merely that the draft was generated quickly.",
+      },
       reviewTasks: [
         {
           taskType: "resolve-omission",
@@ -711,6 +733,17 @@ export const clinicalNotes: ClinicalNote[] = [
         escalationDeadline: "2026-06-06T15:30:00Z",
         reason:
           "Telehealth medication addition requires attending clinician review against medication history before sign-off.",
+      },
+      outcomeMonitor: {
+        trackingSignal: "medication-response",
+        owner: "care-team",
+        dueDate: "2026-06-20",
+        expectedEvidence: [
+          "Patient reports evening GERD symptom trend after famotidine start through portal or follow-up call.",
+          "Medication reconciliation confirms PPI plus H2 blocker instructions were understood and not duplicated.",
+        ],
+        reason:
+          "Medication-response monitoring ties the AI-drafted telehealth plan to a patient outcome signal after clinician sign-off.",
       },
       reviewTasks: [
         {

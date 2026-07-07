@@ -80,6 +80,19 @@ export interface ClinicalSafetyEscalationPath {
   reason: string;
 }
 
+export type ClinicalSafetyOutcomeSignal =
+  | "symptom-follow-up"
+  | "care-gap-check"
+  | "medication-response";
+
+export interface ClinicalSafetyOutcomeMonitor {
+  trackingSignal: ClinicalSafetyOutcomeSignal;
+  owner: "clinician" | "care-team" | "quality-review";
+  dueDate: string;
+  expectedEvidence: string[];
+  reason: string;
+}
+
 export interface AiClinicalSafetyReview {
   riskLevel: "low" | "moderate" | "high";
   clinicianEdited: boolean;
@@ -87,6 +100,7 @@ export interface AiClinicalSafetyReview {
   qualityConcerns: ClinicalNoteQualityConcern[];
   sourceAnchors: ClinicalSourceAnchor[];
   escalationPath: ClinicalSafetyEscalationPath;
+  outcomeMonitor: ClinicalSafetyOutcomeMonitor;
   reviewTasks: ClinicalSafetyReviewTask[];
   reviewNote: string;
 }
