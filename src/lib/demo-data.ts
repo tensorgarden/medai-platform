@@ -567,6 +567,14 @@ export const clinicalNotes: ClinicalNote[] = [
       riskLevel: "high",
       clinicianEdited: false,
       errorReportStatus: "queued",
+      ambientCaptureConsent: {
+        status: "obtained",
+        capturedAt: "2026-06-02T13:58:00Z",
+        disclosureLanguage: "English",
+        captureMode: "transcript-only",
+        audioRetention: "none",
+        revocable: true,
+      },
       qualityConcerns: ["unsupported-recommendation", "note-bloat"],
       sourceAnchors: [
         {
@@ -644,6 +652,14 @@ export const clinicalNotes: ClinicalNote[] = [
       riskLevel: "moderate",
       clinicianEdited: false,
       errorReportStatus: "queued",
+      ambientCaptureConsent: {
+        status: "obtained",
+        capturedAt: "2026-06-09T09:28:00Z",
+        disclosureLanguage: "English",
+        captureMode: "transcript-only",
+        audioRetention: "none",
+        revocable: true,
+      },
       qualityConcerns: ["possible-omission"],
       sourceAnchors: [
         {
@@ -713,6 +729,14 @@ export const clinicalNotes: ClinicalNote[] = [
       riskLevel: "moderate",
       clinicianEdited: false,
       errorReportStatus: "queued",
+      ambientCaptureConsent: {
+        status: "obtained",
+        capturedAt: "2026-06-06T13:58:00Z",
+        disclosureLanguage: "English",
+        captureMode: "transcript-only",
+        audioRetention: "none",
+        revocable: true,
+      },
       qualityConcerns: ["unsupported-recommendation"],
       sourceAnchors: [
         {

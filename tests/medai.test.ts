@@ -106,6 +106,25 @@ describe("Clinical Notes", () => {
     }
   });
 
+  it("records revocable consent before ambient capture without retaining audio", () => {
+    const riskReviews = clinicalNotes.flatMap((n: ClinicalNote) =>
+      n.aiSafetyReview ? [n.aiSafetyReview] : []
+    );
+
+    for (const review of riskReviews) {
+      const consent = review.ambientCaptureConsent;
+
+      expect(consent.status).toBe("obtained");
+      expect(consent.capturedAt).toMatch(
+        /^2026-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/
+      );
+      expect(consent.disclosureLanguage.length).toBeGreaterThan(2);
+      expect(consent.captureMode).toBe("transcript-only");
+      expect(consent.audioRetention).toBe("none");
+      expect(consent.revocable).toBe(true);
+    }
+  });
+
   it("AI safety anchors should preserve source provenance for audit review", () => {
     const riskReviews = clinicalNotes.flatMap((n: ClinicalNote) =>
       n.aiSafetyReview ? [n.aiSafetyReview] : []

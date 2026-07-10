@@ -265,6 +265,10 @@ export default function HomePage() {
                       {leadTask.note}
                     </p>
                     <p className="mt-1 text-xs text-gray-500">
+                      Ambient capture: {review.ambientCaptureConsent.status} ·{" "}
+                      {review.ambientCaptureConsent.captureMode.split("-").join(" ")} · no audio retained
+                    </p>
+                    <p className="mt-1 text-xs text-gray-500">
                       Escalation: {review.escalationPath.accountableRole.split("-").join(" ")} by{" "}
                       {review.escalationPath.escalationDeadline.slice(0, 10)}
                     </p>

@@ -93,10 +93,20 @@ export interface ClinicalSafetyOutcomeMonitor {
   reason: string;
 }
 
+export interface AmbientCaptureConsent {
+  status: "obtained" | "declined" | "withdrawn";
+  capturedAt: string | null;
+  disclosureLanguage: string;
+  captureMode: "transcript-only" | "audio-retained";
+  audioRetention: "none" | "encounter-only";
+  revocable: boolean;
+}
+
 export interface AiClinicalSafetyReview {
   riskLevel: "low" | "moderate" | "high";
   clinicianEdited: boolean;
   errorReportStatus: "not-needed" | "queued" | "reported";
+  ambientCaptureConsent: AmbientCaptureConsent;
   qualityConcerns: ClinicalNoteQualityConcern[];
   sourceAnchors: ClinicalSourceAnchor[];
   escalationPath: ClinicalSafetyEscalationPath;
