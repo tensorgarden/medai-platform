@@ -118,7 +118,11 @@ describe("Clinical Notes", () => {
       expect(consent.capturedAt).toMatch(
         /^2026-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/
       );
+      expect(["pre-visit", "rooming", "point-of-capture"]).toContain(
+        consent.consentTouchpoint
+      );
       expect(consent.disclosureLanguage.length).toBeGreaterThan(2);
+      expect(consent.optOutExplained).toBe(true);
       expect(consent.captureMode).toBe("transcript-only");
       expect(consent.audioRetention).toBe("none");
       expect(consent.revocable).toBe(true);

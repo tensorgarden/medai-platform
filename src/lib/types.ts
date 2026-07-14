@@ -96,7 +96,9 @@ export interface ClinicalSafetyOutcomeMonitor {
 export interface AmbientCaptureConsent {
   status: "obtained" | "declined" | "withdrawn";
   capturedAt: string | null;
+  consentTouchpoint: "pre-visit" | "rooming" | "point-of-capture";
   disclosureLanguage: string;
+  optOutExplained: boolean;
   captureMode: "transcript-only" | "audio-retained";
   audioRetention: "none" | "encounter-only";
   revocable: boolean;

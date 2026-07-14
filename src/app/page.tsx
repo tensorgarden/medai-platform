@@ -266,7 +266,7 @@ export default function HomePage() {
                     </p>
                     <p className="mt-1 text-xs text-gray-500">
                       Ambient capture: {review.ambientCaptureConsent.status} ·{" "}
-                      {review.ambientCaptureConsent.captureMode.split("-").join(" ")} · no audio retained
+                      {review.ambientCaptureConsent.captureMode.split("-").join(" ")} · opt-out explained · no audio retained
                     </p>
                     <p className="mt-1 text-xs text-gray-500">
                       Escalation: {review.escalationPath.accountableRole.split("-").join(" ")} by{" "}

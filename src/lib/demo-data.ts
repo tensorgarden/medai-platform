@@ -570,7 +570,9 @@ export const clinicalNotes: ClinicalNote[] = [
       ambientCaptureConsent: {
         status: "obtained",
         capturedAt: "2026-06-02T13:58:00Z",
+        consentTouchpoint: "point-of-capture",
         disclosureLanguage: "English",
+        optOutExplained: true,
         captureMode: "transcript-only",
         audioRetention: "none",
         revocable: true,
@@ -655,7 +657,9 @@ export const clinicalNotes: ClinicalNote[] = [
       ambientCaptureConsent: {
         status: "obtained",
         capturedAt: "2026-06-09T09:28:00Z",
+        consentTouchpoint: "rooming",
         disclosureLanguage: "English",
+        optOutExplained: true,
         captureMode: "transcript-only",
         audioRetention: "none",
         revocable: true,
@@ -732,7 +736,9 @@ export const clinicalNotes: ClinicalNote[] = [
       ambientCaptureConsent: {
         status: "obtained",
         capturedAt: "2026-06-06T13:58:00Z",
+        consentTouchpoint: "pre-visit",
         disclosureLanguage: "English",
+        optOutExplained: true,
         captureMode: "transcript-only",
         audioRetention: "none",
         revocable: true,
