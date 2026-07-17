@@ -582,12 +582,14 @@ export const clinicalNotes: ClinicalNote[] = [
         {
           sourceType: "transcript",
           speaker: "patient",
+          speakerAttribution: "high-confidence",
           timestamp: "00:03:18",
           snippet: "Reports increased shortness of breath on exertion",
         },
         {
           sourceType: "transcript",
           speaker: "clinician",
+          speakerAttribution: "review-required",
           timestamp: "00:09:42",
           snippet: "CAT score documented as 18; FEV1 55% predicted",
         },
@@ -620,7 +622,7 @@ export const clinicalNotes: ClinicalNote[] = [
           taskType: "verify-source-evidence",
           owner: "scribe-reviewer",
           dueBeforeSignoff: true,
-          note: "Compare pulmonary rehab recommendation against transcript anchors and visit findings.",
+          note: "Compare the pulmonary recommendation and confirm who stated the CAT score and FEV1 findings.",
         },
         {
           taskType: "patient-safety-escalation",
@@ -748,12 +750,14 @@ export const clinicalNotes: ClinicalNote[] = [
         {
           sourceType: "transcript",
           speaker: "patient",
+          speakerAttribution: "high-confidence",
           timestamp: "00:02:11",
           snippet: "GERD symptoms worsening in the evening",
         },
         {
           sourceType: "transcript",
           speaker: "clinician",
+          speakerAttribution: "high-confidence",
           timestamp: "00:13:27",
           snippet: "Famotidine 20mg at bedtime discussed with ongoing PPI",
         },

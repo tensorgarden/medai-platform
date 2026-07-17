@@ -245,6 +245,11 @@ export default function HomePage() {
               {safetyQueue.map((note) => {
                 const review = note.aiSafetyReview!;
                 const leadTask = review.reviewTasks[0];
+                const speakerAttributionChecks = review.sourceAnchors.filter(
+                  (anchor) =>
+                    anchor.sourceType === "transcript" &&
+                    anchor.speakerAttribution === "review-required"
+                ).length;
 
                 return (
                   <li key={note.id} className="py-3">
@@ -267,6 +272,12 @@ export default function HomePage() {
                     <p className="mt-1 text-xs text-gray-500">
                       Ambient capture: {review.ambientCaptureConsent.status} ·{" "}
                       {review.ambientCaptureConsent.captureMode.split("-").join(" ")} · opt-out explained · no audio retained
+                    </p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Speaker attribution: {" "}
+                      {speakerAttributionChecks > 0
+                        ? `${speakerAttributionChecks} check${speakerAttributionChecks === 1 ? "" : "s"} before sign-off`
+                        : "no unresolved flags"}
                     </p>
                     <p className="mt-1 text-xs text-gray-500">
                       Escalation: {review.escalationPath.accountableRole.split("-").join(" ")} by{" "}

@@ -141,9 +141,35 @@ describe("Clinical Notes", () => {
         expect(anchor.snippet.length).toBeGreaterThan(20);
         if (anchor.sourceType === "transcript") {
           expect(anchor.timestamp).toMatch(/^\d{2}:\d{2}:\d{2}$/);
-          expect(anchor.speaker).toMatch(/patient|clinician|caregiver/);
+          expect(anchor.speaker).toMatch(/patient|clinician|caregiver|interpreter/);
+          expect(anchor.speakerAttribution).toMatch(
+            /high-confidence|review-required/
+          );
+        } else {
+          expect("speaker" in anchor).toBe(false);
+          expect("speakerAttribution" in anchor).toBe(false);
         }
       }
+    }
+  });
+
+  it("keeps uncertain speaker attribution in the pre-signoff review queue", () => {
+    const notesWithAttributionFlags = clinicalNotes.filter((note: ClinicalNote) =>
+      note.aiSafetyReview?.sourceAnchors.some(
+        (anchor) =>
+          anchor.sourceType === "transcript" &&
+          anchor.speakerAttribution === "review-required"
+      )
+    );
+
+    expect(notesWithAttributionFlags.length).toBeGreaterThanOrEqual(1);
+    for (const note of notesWithAttributionFlags) {
+      expect(note.status).toBe("draft");
+      expect(
+        note.aiSafetyReview!.reviewTasks.some(
+          (task) => task.taskType === "verify-source-evidence"
+        )
+      ).toBe(true);
     }
   });
 

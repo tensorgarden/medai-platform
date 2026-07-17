@@ -117,9 +117,20 @@ export interface AiClinicalSafetyReview {
   reviewNote: string;
 }
 
-export interface ClinicalSourceAnchor {
-  sourceType: "transcript" | "lab-result" | "vitals";
-  speaker?: "patient" | "clinician" | "caregiver";
+export type ClinicalSourceAnchor =
+  | ClinicalTranscriptSourceAnchor
+  | ClinicalStructuredSourceAnchor;
+
+export interface ClinicalTranscriptSourceAnchor {
+  sourceType: "transcript";
+  speaker: "patient" | "clinician" | "caregiver" | "interpreter";
+  speakerAttribution: "high-confidence" | "review-required";
+  timestamp: string;
+  snippet: string;
+}
+
+export interface ClinicalStructuredSourceAnchor {
+  sourceType: "lab-result" | "vitals";
   timestamp: string;
   snippet: string;
 }
