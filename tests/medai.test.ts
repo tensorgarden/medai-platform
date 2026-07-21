@@ -292,6 +292,65 @@ describe("Clinical Notes", () => {
       }
     }
   });
+
+  it("maps high-impact clinical facts to concrete source anchors", () => {
+    const riskNotes = clinicalNotes.filter(
+      (n: ClinicalNote) => n.aiSafetyReview
+    );
+    const verificationStates = new Set<string>();
+
+    for (const note of riskNotes) {
+      const review = note.aiSafetyReview!;
+      expect(review.criticalFactChecks.length).toBeGreaterThanOrEqual(2);
+
+      for (const check of review.criticalFactChecks) {
+        expect([
+          "medication-plan",
+          "diagnostic-evidence",
+          "follow-up-action",
+        ]).toContain(check.factType);
+        expect(check.claim.length).toBeGreaterThan(35);
+        expect(check.sourceAnchorIndexes.length).toBeGreaterThanOrEqual(1);
+        expect(["clinician", "care-team"]).toContain(check.reviewer);
+        verificationStates.add(check.verificationStatus);
+
+        for (const anchorIndex of check.sourceAnchorIndexes) {
+          expect(Number.isInteger(anchorIndex)).toBe(true);
+          expect(anchorIndex).toBeGreaterThanOrEqual(0);
+          expect(anchorIndex).toBeLessThan(review.sourceAnchors.length);
+        }
+      }
+    }
+
+    expect(verificationStates).toEqual(
+      new Set(["verified", "review-required"])
+    );
+  });
+
+  it("keeps unresolved medication and follow-up claims before sign-off", () => {
+    const unresolvedClaims = clinicalNotes.flatMap((note: ClinicalNote) =>
+      note.aiSafetyReview?.criticalFactChecks
+        .filter(
+          (check) =>
+            check.verificationStatus === "review-required" &&
+            ["medication-plan", "follow-up-action"].includes(check.factType)
+        )
+        .map((check) => ({ note, check })) ?? []
+    );
+
+    expect(unresolvedClaims.length).toBeGreaterThanOrEqual(3);
+    for (const { note, check } of unresolvedClaims) {
+      expect(note.status).toBe("draft");
+      const taskTypes = note.aiSafetyReview!.reviewTasks.map(
+        (task) => task.taskType
+      );
+      expect(taskTypes).toContain(
+        check.factType === "medication-plan"
+          ? "confirm-medication-change"
+          : "resolve-omission"
+      );
+    }
+  });
 });
 
 // 4. Prescriptions

@@ -250,6 +250,9 @@ export default function HomePage() {
                     anchor.sourceType === "transcript" &&
                     anchor.speakerAttribution === "review-required"
                 ).length;
+                const criticalFactChecks = review.criticalFactChecks.filter(
+                  (check) => check.verificationStatus === "review-required"
+                ).length;
 
                 return (
                   <li key={note.id} className="py-3">
@@ -278,6 +281,10 @@ export default function HomePage() {
                       {speakerAttributionChecks > 0
                         ? `${speakerAttributionChecks} check${speakerAttributionChecks === 1 ? "" : "s"} before sign-off`
                         : "no unresolved flags"}
+                    </p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Critical facts: {criticalFactChecks}{" "}
+                      {criticalFactChecks === 1 ? "needs" : "need"} source verification
                     </p>
                     <p className="mt-1 text-xs text-gray-500">
                       Escalation: {review.escalationPath.accountableRole.split("-").join(" ")} by{" "}

@@ -578,6 +578,22 @@ export const clinicalNotes: ClinicalNote[] = [
         revocable: true,
       },
       qualityConcerns: ["unsupported-recommendation", "note-bloat"],
+      criticalFactChecks: [
+        {
+          factType: "medication-plan",
+          claim: "Adjust tiotropium and add as-needed albuterol for COPD symptoms.",
+          sourceAnchorIndexes: [0, 1],
+          verificationStatus: "review-required",
+          reviewer: "clinician",
+        },
+        {
+          factType: "diagnostic-evidence",
+          claim: "CAT score is 18 and FEV1 is 55% of predicted.",
+          sourceAnchorIndexes: [1],
+          verificationStatus: "review-required",
+          reviewer: "clinician",
+        },
+      ],
       sourceAnchors: [
         {
           sourceType: "transcript",
@@ -667,6 +683,22 @@ export const clinicalNotes: ClinicalNote[] = [
         revocable: true,
       },
       qualityConcerns: ["possible-omission"],
+      criticalFactChecks: [
+        {
+          factType: "follow-up-action",
+          claim: "Schedule glucose tolerance testing at the next prenatal visit.",
+          sourceAnchorIndexes: [1],
+          verificationStatus: "review-required",
+          reviewer: "clinician",
+        },
+        {
+          factType: "diagnostic-evidence",
+          claim: "Fetal heart rate is 148 bpm and fundal height is 22 cm.",
+          sourceAnchorIndexes: [0],
+          verificationStatus: "verified",
+          reviewer: "clinician",
+        },
+      ],
       sourceAnchors: [
         {
           sourceType: "vitals",
@@ -746,6 +778,22 @@ export const clinicalNotes: ClinicalNote[] = [
         revocable: true,
       },
       qualityConcerns: ["unsupported-recommendation"],
+      criticalFactChecks: [
+        {
+          factType: "medication-plan",
+          claim: "Add famotidine at bedtime while continuing the morning PPI.",
+          sourceAnchorIndexes: [1],
+          verificationStatus: "review-required",
+          reviewer: "clinician",
+        },
+        {
+          factType: "diagnostic-evidence",
+          claim: "GERD symptoms are worsening in the evening.",
+          sourceAnchorIndexes: [0],
+          verificationStatus: "verified",
+          reviewer: "clinician",
+        },
+      ],
       sourceAnchors: [
         {
           sourceType: "transcript",

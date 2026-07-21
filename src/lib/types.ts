@@ -93,6 +93,14 @@ export interface ClinicalSafetyOutcomeMonitor {
   reason: string;
 }
 
+export interface ClinicalCriticalFactCheck {
+  factType: "medication-plan" | "diagnostic-evidence" | "follow-up-action";
+  claim: string;
+  sourceAnchorIndexes: number[];
+  verificationStatus: "verified" | "review-required";
+  reviewer: "clinician" | "care-team";
+}
+
 export interface AmbientCaptureConsent {
   status: "obtained" | "declined" | "withdrawn";
   capturedAt: string | null;
@@ -110,6 +118,7 @@ export interface AiClinicalSafetyReview {
   errorReportStatus: "not-needed" | "queued" | "reported";
   ambientCaptureConsent: AmbientCaptureConsent;
   qualityConcerns: ClinicalNoteQualityConcern[];
+  criticalFactChecks: ClinicalCriticalFactCheck[];
   sourceAnchors: ClinicalSourceAnchor[];
   escalationPath: ClinicalSafetyEscalationPath;
   outcomeMonitor: ClinicalSafetyOutcomeMonitor;
