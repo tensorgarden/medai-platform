@@ -687,8 +687,8 @@ export const clinicalNotes: ClinicalNote[] = [
         {
           factType: "follow-up-action",
           claim: "Schedule glucose tolerance testing at the next prenatal visit.",
-          sourceAnchorIndexes: [1],
-          verificationStatus: "review-required",
+          sourceAnchorIndexes: [],
+          verificationStatus: "missing-evidence",
           reviewer: "clinician",
         },
         {

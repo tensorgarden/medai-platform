@@ -97,7 +97,7 @@ export interface ClinicalCriticalFactCheck {
   factType: "medication-plan" | "diagnostic-evidence" | "follow-up-action";
   claim: string;
   sourceAnchorIndexes: number[];
-  verificationStatus: "verified" | "review-required";
+  verificationStatus: "verified" | "review-required" | "missing-evidence";
   reviewer: "clinician" | "care-team";
 }
 

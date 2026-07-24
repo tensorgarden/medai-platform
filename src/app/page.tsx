@@ -253,6 +253,9 @@ export default function HomePage() {
                 const criticalFactChecks = review.criticalFactChecks.filter(
                   (check) => check.verificationStatus === "review-required"
                 ).length;
+                const missingEvidenceChecks = review.criticalFactChecks.filter(
+                  (check) => check.verificationStatus === "missing-evidence"
+                ).length;
 
                 return (
                   <li key={note.id} className="py-3">
@@ -284,7 +287,8 @@ export default function HomePage() {
                     </p>
                     <p className="mt-1 text-xs text-gray-500">
                       Critical facts: {criticalFactChecks}{" "}
-                      {criticalFactChecks === 1 ? "needs" : "need"} source verification
+                      {criticalFactChecks === 1 ? "needs" : "need"} source verification ·{" "}
+                      {missingEvidenceChecks} missing evidence
                     </p>
                     <p className="mt-1 text-xs text-gray-500">
                       Escalation: {review.escalationPath.accountableRole.split("-").join(" ")} by{" "}

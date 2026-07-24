@@ -310,7 +310,11 @@ describe("Clinical Notes", () => {
           "follow-up-action",
         ]).toContain(check.factType);
         expect(check.claim.length).toBeGreaterThan(35);
-        expect(check.sourceAnchorIndexes.length).toBeGreaterThanOrEqual(1);
+        if (check.verificationStatus === "missing-evidence") {
+          expect(check.sourceAnchorIndexes).toHaveLength(0);
+        } else {
+          expect(check.sourceAnchorIndexes.length).toBeGreaterThanOrEqual(1);
+        }
         expect(["clinician", "care-team"]).toContain(check.reviewer);
         verificationStates.add(check.verificationStatus);
 
@@ -323,7 +327,7 @@ describe("Clinical Notes", () => {
     }
 
     expect(verificationStates).toEqual(
-      new Set(["verified", "review-required"])
+      new Set(["verified", "review-required", "missing-evidence"])
     );
   });
 
@@ -332,7 +336,7 @@ describe("Clinical Notes", () => {
       note.aiSafetyReview?.criticalFactChecks
         .filter(
           (check) =>
-            check.verificationStatus === "review-required" &&
+            check.verificationStatus !== "verified" &&
             ["medication-plan", "follow-up-action"].includes(check.factType)
         )
         .map((check) => ({ note, check })) ?? []
@@ -349,6 +353,25 @@ describe("Clinical Notes", () => {
           ? "confirm-medication-change"
           : "resolve-omission"
       );
+    }
+  });
+
+  it("routes unsupported critical claims without fabricated source links", () => {
+    const missingEvidenceClaims = clinicalNotes.flatMap((note: ClinicalNote) =>
+      note.aiSafetyReview?.criticalFactChecks
+        .filter((check) => check.verificationStatus === "missing-evidence")
+        .map((check) => ({ note, check })) ?? []
+    );
+
+    expect(missingEvidenceClaims.length).toBeGreaterThanOrEqual(1);
+    for (const { note, check } of missingEvidenceClaims) {
+      expect(note.status).toBe("draft");
+      expect(check.sourceAnchorIndexes).toHaveLength(0);
+      expect(
+        note.aiSafetyReview!.reviewTasks.some(
+          (task) => task.taskType === "resolve-omission"
+        )
+      ).toBe(true);
     }
   });
 });
