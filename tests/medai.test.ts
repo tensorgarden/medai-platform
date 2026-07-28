@@ -14,6 +14,7 @@ import type {
   IntakeForm,
   Prescription,
   HealthcareMetric,
+  ClinicalMedicationFactCheck,
 } from "@/lib/types";
 
 // 1. Patient count
@@ -329,6 +330,58 @@ describe("Clinical Notes", () => {
     expect(verificationStates).toEqual(
       new Set(["verified", "review-required", "missing-evidence"])
     );
+  });
+
+  it("reconciles medication plans across conversational and structured sources", () => {
+    const medicationPlans = clinicalNotes.flatMap((note: ClinicalNote) =>
+      note.aiSafetyReview?.criticalFactChecks
+        .filter((check) => check.factType === "medication-plan")
+        .map((check) => ({ note, check })) ?? []
+    );
+    const statuses = new Set<string>();
+
+    expect(medicationPlans.length).toBeGreaterThanOrEqual(2);
+    for (const { check } of medicationPlans) {
+      const reconciliation = check.medicationReconciliation;
+
+      expect(reconciliation.comparedSources).toContain("patient-report");
+      expect(reconciliation.comparedSources).toContain("ehr-medication-list");
+      expect(["matched", "review-required", "discrepancy"]).toContain(
+        reconciliation.status
+      );
+      expect(["confirmed", "not-available", "not-required"]).toContain(
+        reconciliation.visualVerification
+      );
+      expect(reconciliation.note.length).toBeGreaterThan(100);
+      statuses.add(reconciliation.status);
+    }
+
+    expect(statuses).toEqual(new Set(["review-required", "discrepancy"]));
+  });
+
+  it("keeps unresolved medication reconciliation before sign-off", () => {
+    const unresolvedMedicationPlans = clinicalNotes.flatMap((note: ClinicalNote) =>
+      note.aiSafetyReview?.criticalFactChecks
+        .filter(
+          (check): check is ClinicalMedicationFactCheck =>
+            check.factType === "medication-plan" &&
+            check.medicationReconciliation.status !== "matched"
+        )
+        .map((check) => ({ note, check })) ?? []
+    );
+
+    expect(unresolvedMedicationPlans.length).toBeGreaterThanOrEqual(2);
+    for (const { note, check } of unresolvedMedicationPlans) {
+      expect(note.status).toBe("draft");
+      expect(check.medicationReconciliation.visualVerification).toBe(
+        "not-available"
+      );
+      expect(
+        note.aiSafetyReview!.reviewTasks.some(
+          (task) => task.taskType === "confirm-medication-change"
+        )
+      ).toBe(true);
+    }
   });
 
   it("keeps unresolved medication and follow-up claims before sign-off", () => {

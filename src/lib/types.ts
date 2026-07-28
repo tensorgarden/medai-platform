@@ -93,13 +93,40 @@ export interface ClinicalSafetyOutcomeMonitor {
   reason: string;
 }
 
-export interface ClinicalCriticalFactCheck {
-  factType: "medication-plan" | "diagnostic-evidence" | "follow-up-action";
+export type ClinicalMedicationReconciliationSource =
+  | "patient-report"
+  | "ehr-medication-list"
+  | "pharmacy-record"
+  | "medication-container";
+
+export interface ClinicalMedicationReconciliation {
+  status: "matched" | "review-required" | "discrepancy";
+  comparedSources: ClinicalMedicationReconciliationSource[];
+  visualVerification: "confirmed" | "not-available" | "not-required";
+  note: string;
+}
+
+interface ClinicalCriticalFactCheckBase {
   claim: string;
   sourceAnchorIndexes: number[];
   verificationStatus: "verified" | "review-required" | "missing-evidence";
   reviewer: "clinician" | "care-team";
 }
+
+export interface ClinicalMedicationFactCheck
+  extends ClinicalCriticalFactCheckBase {
+  factType: "medication-plan";
+  medicationReconciliation: ClinicalMedicationReconciliation;
+}
+
+export interface ClinicalNonMedicationFactCheck
+  extends ClinicalCriticalFactCheckBase {
+  factType: "diagnostic-evidence" | "follow-up-action";
+}
+
+export type ClinicalCriticalFactCheck =
+  | ClinicalMedicationFactCheck
+  | ClinicalNonMedicationFactCheck;
 
 export interface AmbientCaptureConsent {
   status: "obtained" | "declined" | "withdrawn";

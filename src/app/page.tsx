@@ -6,6 +6,7 @@ import {
   prescriptions,
   metrics,
 } from "@/lib/demo-data";
+import type { ClinicalMedicationFactCheck } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProgressBar } from "@/components/ui/progress-bar";
@@ -256,6 +257,18 @@ export default function HomePage() {
                 const missingEvidenceChecks = review.criticalFactChecks.filter(
                   (check) => check.verificationStatus === "missing-evidence"
                 ).length;
+                const unresolvedMedicationReconciliations =
+                  review.criticalFactChecks.filter(
+                    (check): check is ClinicalMedicationFactCheck =>
+                      check.factType === "medication-plan" &&
+                      check.medicationReconciliation.status !== "matched"
+                  );
+                const visualMedicationChecksPending =
+                  unresolvedMedicationReconciliations.filter(
+                    (check) =>
+                      check.medicationReconciliation.visualVerification ===
+                      "not-available"
+                  ).length;
 
                 return (
                   <li key={note.id} className="py-3">
@@ -289,6 +302,12 @@ export default function HomePage() {
                       Critical facts: {criticalFactChecks}{" "}
                       {criticalFactChecks === 1 ? "needs" : "need"} source verification ·{" "}
                       {missingEvidenceChecks} missing evidence
+                    </p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Medication reconciliation: {" "}
+                      {unresolvedMedicationReconciliations.length > 0
+                        ? `${unresolvedMedicationReconciliations.length} unresolved · ${visualMedicationChecksPending} visual check${visualMedicationChecksPending === 1 ? "" : "s"} unavailable`
+                        : "no unresolved medication flags"}
                     </p>
                     <p className="mt-1 text-xs text-gray-500">
                       Escalation: {review.escalationPath.accountableRole.split("-").join(" ")} by{" "}
