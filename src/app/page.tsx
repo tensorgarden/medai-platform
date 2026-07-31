@@ -269,6 +269,24 @@ export default function HomePage() {
                       check.medicationReconciliation.visualVerification ===
                       "not-available"
                   ).length;
+                const medicationResolutionOwners = Array.from(
+                  new Set(
+                    unresolvedMedicationReconciliations.map((check) =>
+                      check.medicationReconciliation.resolutionOwner
+                        .split("-")
+                        .join(" ")
+                    )
+                  )
+                );
+                const nextMedicationVerificationSources = Array.from(
+                  new Set(
+                    unresolvedMedicationReconciliations.map((check) =>
+                      check.medicationReconciliation.nextVerificationSource
+                        .split("-")
+                        .join(" ")
+                    )
+                  )
+                );
 
                 return (
                   <li key={note.id} className="py-3">
@@ -308,6 +326,12 @@ export default function HomePage() {
                       {unresolvedMedicationReconciliations.length > 0
                         ? `${unresolvedMedicationReconciliations.length} unresolved · ${visualMedicationChecksPending} visual check${visualMedicationChecksPending === 1 ? "" : "s"} unavailable`
                         : "no unresolved medication flags"}
+                    </p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Medication resolution: {" "}
+                      {unresolvedMedicationReconciliations.length > 0
+                        ? `${medicationResolutionOwners.join(", ")} · verify ${nextMedicationVerificationSources.join(", ")}`
+                        : "no follow-up source required"}
                     </p>
                     <p className="mt-1 text-xs text-gray-500">
                       Escalation: {review.escalationPath.accountableRole.split("-").join(" ")} by{" "}

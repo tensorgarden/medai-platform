@@ -589,6 +589,8 @@ export const clinicalNotes: ClinicalNote[] = [
             status: "review-required",
             comparedSources: ["patient-report", "ehr-medication-list"],
             visualVerification: "not-available",
+            resolutionOwner: "pharmacist",
+            nextVerificationSource: "medication-container",
             note:
               "Audio capture did not verify the tiotropium device or label; reconcile the active EHR list with the patient's actual inhaler use before sign-off.",
           },
@@ -796,6 +798,8 @@ export const clinicalNotes: ClinicalNote[] = [
             status: "discrepancy",
             comparedSources: ["patient-report", "ehr-medication-list"],
             visualVerification: "not-available",
+            resolutionOwner: "pharmacist",
+            nextVerificationSource: "pharmacy-record",
             note:
               "The conversation says to continue a morning PPI, but the active EHR medication list has no PPI entry; resolve the discrepancy before adding famotidine.",
           },

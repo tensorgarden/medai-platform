@@ -384,6 +384,45 @@ describe("Clinical Notes", () => {
     }
   });
 
+  it("assigns unresolved medication reconciliation to a named resolution path", () => {
+    const unresolvedMedicationPlans = clinicalNotes.flatMap((note: ClinicalNote) =>
+      note.aiSafetyReview?.criticalFactChecks
+        .filter(
+          (check): check is ClinicalMedicationFactCheck =>
+            check.factType === "medication-plan" &&
+            check.medicationReconciliation.status !== "matched"
+        )
+        .map((check) => ({ note, check })) ?? []
+    );
+    const owners = new Set<string>();
+    const nextSources = new Set<string>();
+
+    expect(unresolvedMedicationPlans.length).toBeGreaterThanOrEqual(2);
+    for (const { check } of unresolvedMedicationPlans) {
+      const reconciliation = check.medicationReconciliation;
+
+      expect(["clinician", "pharmacist", "care-team"]).toContain(
+        reconciliation.resolutionOwner
+      );
+      expect([
+        "patient-report",
+        "ehr-medication-list",
+        "pharmacy-record",
+        "medication-container",
+      ]).toContain(reconciliation.nextVerificationSource);
+      expect(reconciliation.comparedSources).not.toContain(
+        reconciliation.nextVerificationSource
+      );
+      owners.add(reconciliation.resolutionOwner);
+      nextSources.add(reconciliation.nextVerificationSource);
+    }
+
+    expect([...owners]).toContain("pharmacist");
+    expect([...nextSources]).toEqual(
+      expect.arrayContaining(["medication-container", "pharmacy-record"])
+    );
+  });
+
   it("keeps unresolved medication and follow-up claims before sign-off", () => {
     const unresolvedClaims = clinicalNotes.flatMap((note: ClinicalNote) =>
       note.aiSafetyReview?.criticalFactChecks

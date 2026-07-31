@@ -99,10 +99,17 @@ export type ClinicalMedicationReconciliationSource =
   | "pharmacy-record"
   | "medication-container";
 
+export type ClinicalMedicationReconciliationOwner =
+  | "clinician"
+  | "pharmacist"
+  | "care-team";
+
 export interface ClinicalMedicationReconciliation {
   status: "matched" | "review-required" | "discrepancy";
   comparedSources: ClinicalMedicationReconciliationSource[];
   visualVerification: "confirmed" | "not-available" | "not-required";
+  resolutionOwner: ClinicalMedicationReconciliationOwner;
+  nextVerificationSource: ClinicalMedicationReconciliationSource;
   note: string;
 }
 
