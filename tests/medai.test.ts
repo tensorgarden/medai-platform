@@ -538,6 +538,41 @@ describe("Clinic Metrics", () => {
     expect(editRateMetric!.period).toBe("month");
     expect(editRateMetric!.trend).toMatch(/up|down|stable/);
   });
+
+  it("provider edit rate should carry a coherent month-over-month trend series", () => {
+    const editRateMetric = metrics.find(
+      (m: HealthcareMetric) => m.label === "Provider Edit Rate"
+    );
+    expect(editRateMetric).toBeDefined();
+    const trend = editRateMetric!.monthlyTrend;
+
+    expect(trend).toBeDefined();
+    expect(trend!.length).toBeGreaterThanOrEqual(6);
+
+    // ISO month labels in strict chronological order
+    const months = trend!.map((point) => point.month);
+    for (const month of months) {
+      expect(month).toMatch(/^2026-(0[1-9]|1[0-2])$/);
+    }
+    expect(months).toEqual([...months].sort());
+
+    // Values stay within percentage bounds and decline as note quality improves
+    for (const point of trend!) {
+      expect(point.value).toBeGreaterThan(0);
+      expect(point.value).toBeLessThan(100);
+    }
+    for (let i = 1; i < trend!.length; i++) {
+      expect(trend![i].value).toBeLessThanOrEqual(trend![i - 1].value);
+    }
+
+    // Latest point matches the headline value and the MoM change is coherent
+    const latest = trend![trend!.length - 1];
+    const prior = trend![trend!.length - 2];
+    expect(latest.value).toBe(editRateMetric!.value);
+    const computedChange = ((latest.value - prior.value) / prior.value) * 100;
+    expect(computedChange).toBeCloseTo(editRateMetric!.change, 1);
+    expect(editRateMetric!.trend).toBe("down");
+  });
 });
 
 // 7. Cross-entity referential integrity

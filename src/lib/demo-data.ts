@@ -1237,9 +1237,17 @@ export const metrics: HealthcareMetric[] = [
     label: "Provider Edit Rate",
     value: 28,
     unit: "%",
-    change: -4.3,
+    change: -6.7,
     period: "month",
     trend: "down",
+    monthlyTrend: [
+      { month: "2026-01", value: 41 },
+      { month: "2026-02", value: 38 },
+      { month: "2026-03", value: 36 },
+      { month: "2026-04", value: 33 },
+      { month: "2026-05", value: 30 },
+      { month: "2026-06", value: 28 },
+    ],
     updatedAt: "2026-06-09",
   },
 ];

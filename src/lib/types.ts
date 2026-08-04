@@ -213,6 +213,11 @@ export interface Prescription {
   createdAt: string;
 }
 
+export interface HealthcareMetricTrendPoint {
+  month: string; // ISO month, e.g. "2026-06"
+  value: number;
+}
+
 export interface HealthcareMetric {
   id: string;
   label: string;
@@ -221,5 +226,6 @@ export interface HealthcareMetric {
   change: number; // percentage change
   period: "today" | "week" | "month" | "year";
   trend: "up" | "down" | "stable";
+  monthlyTrend?: HealthcareMetricTrendPoint[]; // month-over-month series, oldest first
   updatedAt: string;
 }

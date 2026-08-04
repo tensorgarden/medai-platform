@@ -446,21 +446,47 @@ export default function HomePage() {
                         ? "text-emerald-600"
                         : "text-red-600"
                       : "text-gray-500";
+                const monthlyTrend = m.monthlyTrend;
+                const trendMax = monthlyTrend
+                  ? Math.max(...monthlyTrend.map((point) => point.value))
+                  : 0;
                 return (
-                  <div
-                    key={m.id}
-                    className="flex items-center justify-between"
-                  >
-                    <span className="text-sm text-gray-500">{m.label}</span>
-                    <div className="text-right">
-                      <span className="text-sm font-semibold text-ink">
-                        {m.value.toLocaleString()} {m.unit}
-                      </span>
-                      <span className={`ml-2 text-xs font-medium ${trendColor}`}>
-                        {m.change > 0 ? "+" : ""}
-                        {m.change}%
-                      </span>
+                  <div key={m.id}>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">{m.label}</span>
+                      <div className="text-right">
+                        <span className="text-sm font-semibold text-ink">
+                          {m.value.toLocaleString()} {m.unit}
+                        </span>
+                        <span className={`ml-2 text-xs font-medium ${trendColor}`}>
+                          {m.change > 0 ? "+" : ""}
+                          {m.change}%
+                        </span>
+                      </div>
                     </div>
+                    {monthlyTrend && (
+                      <div
+                        className="mt-1 flex items-end justify-end gap-1"
+                        role="img"
+                        aria-label={`${m.label} monthly trend: ${monthlyTrend
+                          .map((point) => `${point.month} ${point.value}${m.unit}`)
+                          .join(", ")}`}
+                      >
+                        {monthlyTrend.map((point) => (
+                          <div
+                            key={point.month}
+                            className="w-3 rounded-sm bg-emerald-200"
+                            style={{
+                              height: `${Math.max(
+                                4,
+                                Math.round((point.value / trendMax) * 24)
+                              )}px`,
+                            }}
+                            title={`${point.month}: ${point.value}${m.unit}`}
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               })}
