@@ -87,6 +87,18 @@ tests/
 
 ---
 
+## Screenshots
+
+| Screenshot | Caption |
+|---|---|
+| ![Patient list with intake status and physician assignments](docs/screenshots/01-patients.png) | Patient list with intake status and physician assignments |
+| ![Appointment schedule with visit types and check-in status](docs/screenshots/02-appointment-schedule.png) | Appointment schedule with visit types and check-in status |
+| ![AI-generated clinical notes and review status](docs/screenshots/03-clinical-notes.png) | AI-generated clinical notes and review status |
+| ![AI safety review queue with clinician verification tasks](docs/screenshots/04-ai-safety-review.png) | AI safety review queue with clinician verification tasks |
+| ![Prescription tracker with medication and fulfillment status](docs/screenshots/05-prescription-tracker.png) | Prescription tracker with medication and fulfillment status |
+| ![Patient intake forms with completion and flagged items](docs/screenshots/06-intake-forms.png) | Patient intake forms with completion and flagged items |
+| ![Full-page portfolio demo screenshot](docs/screenshots/00-full-page.png) | Full-page portfolio demo screenshot |
+
 ## Demo Data
 
 The platform ships with realistic demo data:

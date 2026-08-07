@@ -1,62 +1,38 @@
 import { chromium } from 'playwright';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 
 const baseUrl = process.env.SCREENSHOT_URL || 'http://127.0.0.1:3107';
 const outDir = path.resolve('docs/screenshots');
-
 const captures = [
-  {
-    file: '01-dashboard-hero.png',
-    description: 'Landing/dashboard hero with active practice loop',
-    locator: 'header'
-  },
-  {
-    file: '02-candidate-workspace-session-builder.png',
-    description: 'Candidate workspace, session builder, and coach/admin roles',
-    locator: 'section:has-text("Candidate workspace")'
-  },
-  {
-    file: '03-transcript-follow-up.png',
-    description: 'Transcript and deterministic mock AI follow-up',
-    locator: 'section:has-text("Transcript and mock AI follow-up")'
-  },
-  {
-    file: '04-feedback-rubric-report.png',
-    description: 'Rubric scoring and feedback report',
-    locator: 'section:has-text("Rubric scoring and feedback report")'
-  },
-  {
-    file: '05-admin-analytics.png',
-    description: 'Admin progress dashboard and candidate progress timeline',
-    locator: 'section:has-text("Admin progress dashboard")'
-  },
-  {
-    file: '00-full-page.png',
-    description: 'Full-page portfolio demo screenshot',
-    fullPage: true
-  }
+  {"file": "01-patients.png", "description": "Patient list with intake status and physician assignments", "heading": "Patients"},
+  {"file": "02-appointment-schedule.png", "description": "Appointment schedule with visit types and check-in status", "heading": "Appointment Schedule"},
+  {"file": "03-clinical-notes.png", "description": "AI-generated clinical notes and review status", "heading": "Clinical Notes"},
+  {"file": "04-ai-safety-review.png", "description": "AI safety review queue with clinician verification tasks", "heading": "AI Safety Review Queue"},
+  {"file": "05-prescription-tracker.png", "description": "Prescription tracker with medication and fulfillment status", "heading": "Prescription Tracker"},
+  {"file": "06-intake-forms.png", "description": "Patient intake forms with completion and flagged items", "heading": "Intake Forms"}
 ];
 
+await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
-
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1100 }, deviceScaleFactor: 1 });
+await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });
 await page.goto(baseUrl, { waitUntil: 'networkidle' });
-await page.emulateMedia({ colorScheme: 'light' });
 
 const manifest = [];
 for (const capture of captures) {
-  const outputPath = path.join(outDir, capture.file);
-  if (capture.fullPage) {
-    await page.screenshot({ path: outputPath, fullPage: true });
-  } else {
-    const element = page.locator(capture.locator).first();
-    await element.scrollIntoViewIfNeeded();
-    await element.screenshot({ path: outputPath });
-  }
+  const heading = page.getByRole('heading', { name: capture.heading, exact: true }).first();
+  await heading.waitFor({ state: 'visible', timeout: 10000 });
+  let panel = heading.locator('xpath=ancestor::*[(self::section or self::article or self::div) and contains(@class,"rounded")][1]');
+  if (await panel.count() === 0) panel = heading.locator('xpath=ancestor::section[1]');
+  if (await panel.count() === 0) throw new Error(`No panel found for ${capture.heading}`);
+  await panel.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(150);
+  await panel.screenshot({ path: path.join(outDir, capture.file), animations: 'disabled' });
   manifest.push({ file: `docs/screenshots/${capture.file}`, description: capture.description });
 }
-
+await page.screenshot({ path: path.join(outDir, '00-full-page.png'), fullPage: true, animations: 'disabled' });
+manifest.push({ file: 'docs/screenshots/00-full-page.png', description: 'Full-page portfolio demo screenshot' });
 await browser.close();
 console.log(JSON.stringify({ ok: true, baseUrl, screenshots: manifest }, null, 2));
