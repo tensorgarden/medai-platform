@@ -466,6 +466,71 @@ describe("Clinical Notes", () => {
       ).toBe(true);
     }
   });
+  it("gates patient-facing after-visit summaries on clinician review", () => {
+    const riskNotes = clinicalNotes.filter(
+      (n: ClinicalNote) => n.aiSafetyReview
+    );
+
+    expect(riskNotes.length).toBeGreaterThanOrEqual(3);
+    for (const note of riskNotes) {
+      const release = note.aiSafetyReview!.patientSummaryRelease;
+
+      expect([
+        "pending-clinician-review",
+        "approved-for-release",
+        "held",
+      ]).toContain(release.status);
+      expect(["within-target", "too-complex", "not-checked"]).toContain(
+        release.readingLevelCheck
+      );
+      expect(["matches-clinical-note", "review-required"]).toContain(
+        release.instructionConsistency
+      );
+      expect(["clinician", "care-team"]).toContain(release.reviewer);
+      expect(release.note.length).toBeGreaterThan(60);
+      for (const flag of release.medicalJargonFlags) {
+        expect(flag.length).toBeGreaterThanOrEqual(3);
+      }
+
+      // Unsigned drafts must never release patient-facing summaries
+      if (note.status === "draft") {
+        expect(release.status).not.toBe("approved-for-release");
+      }
+    }
+  });
+
+  it("keeps unresolved patient summaries out of portal release", () => {
+    const unresolvedSummaries = clinicalNotes.filter((note: ClinicalNote) => {
+      const release = note.aiSafetyReview?.patientSummaryRelease;
+      return (
+        release &&
+        (release.status === "held" ||
+          release.instructionConsistency === "review-required" ||
+          release.readingLevelCheck !== "within-target")
+      );
+    });
+
+    expect(unresolvedSummaries.length).toBeGreaterThanOrEqual(2);
+    for (const note of unresolvedSummaries) {
+      const release = note.aiSafetyReview!.patientSummaryRelease;
+      expect(note.status).toBe("draft");
+      expect(release.status).not.toBe("approved-for-release");
+      // Unresolved instruction or readability states name concrete jargon to fix
+      expect(release.medicalJargonFlags.length).toBeGreaterThanOrEqual(1);
+    }
+
+    // Non-vacuous held fixture: at least one summary is fully blocked from release
+    const heldSummaries = clinicalNotes.filter(
+      (note: ClinicalNote) =>
+        note.aiSafetyReview?.patientSummaryRelease.status === "held"
+    );
+    expect(heldSummaries.length).toBeGreaterThanOrEqual(1);
+    for (const note of heldSummaries) {
+      expect(note.aiSafetyReview!.patientSummaryRelease.readingLevelCheck).toBe(
+        "too-complex"
+      );
+    }
+  });
 });
 
 // 4. Prescriptions

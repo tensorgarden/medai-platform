@@ -146,6 +146,20 @@ export interface AmbientCaptureConsent {
   revocable: boolean;
 }
 
+export type PatientSummaryReleaseStatus =
+  | "pending-clinician-review"
+  | "approved-for-release"
+  | "held";
+
+export interface PatientSummaryReleaseReview {
+  status: PatientSummaryReleaseStatus;
+  readingLevelCheck: "within-target" | "too-complex" | "not-checked";
+  instructionConsistency: "matches-clinical-note" | "review-required";
+  medicalJargonFlags: string[];
+  reviewer: "clinician" | "care-team";
+  note: string;
+}
+
 export interface AiClinicalSafetyReview {
   riskLevel: "low" | "moderate" | "high";
   clinicianEdited: boolean;
@@ -156,6 +170,7 @@ export interface AiClinicalSafetyReview {
   sourceAnchors: ClinicalSourceAnchor[];
   escalationPath: ClinicalSafetyEscalationPath;
   outcomeMonitor: ClinicalSafetyOutcomeMonitor;
+  patientSummaryRelease: PatientSummaryReleaseReview;
   reviewTasks: ClinicalSafetyReviewTask[];
   reviewNote: string;
 }

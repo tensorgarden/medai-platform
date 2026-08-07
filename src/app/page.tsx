@@ -342,6 +342,17 @@ export default function HomePage() {
                       {review.outcomeMonitor.trackingSignal.split("-").join(" ")} due{" "}
                       {review.outcomeMonitor.dueDate}
                     </p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Patient summary: {" "}
+                      {review.patientSummaryRelease.status.split("-").join(" ")} ·{" "}
+                      {review.patientSummaryRelease.readingLevelCheck === "within-target"
+                        ? "reading level ok"
+                        : review.patientSummaryRelease.readingLevelCheck.split("-").join(" ")}{" "}
+                      ·{" "}
+                      {review.patientSummaryRelease.instructionConsistency === "matches-clinical-note"
+                        ? "instructions match note"
+                        : "instruction review required"}
+                    </p>
                     <p className="mt-1 text-xs font-medium text-amber-700">
                       {review.reviewTasks.length} checks due before sign-off
                     </p>

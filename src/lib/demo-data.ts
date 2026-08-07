@@ -636,6 +636,14 @@ export const clinicalNotes: ClinicalNote[] = [
         reason:
           "High-risk ambient-scribe COPD changes need patient-centered symptom follow-up, not only proof that charting time went down.",
       },
+      patientSummaryRelease: {
+        status: "held",
+        readingLevelCheck: "too-complex",
+        instructionConsistency: "review-required",
+        medicalJargonFlags: ["tiotropium", "FEV1 % predicted", "CAT score"],
+        reviewer: "clinician",
+        note: "Patient-facing summary still uses device names and lung-function jargon, and the medication escalation is unresolved, so the after-visit summary stays out of the portal until the clinician approves plain-language instructions.",
+      },
       reviewTasks: [
         {
           taskType: "confirm-medication-change",
@@ -736,6 +744,14 @@ export const clinicalNotes: ClinicalNote[] = [
         ],
         reason:
           "Prenatal ambient notes should prove recommended follow-up gaps are closed, not merely that the draft was generated quickly.",
+      },
+      patientSummaryRelease: {
+        status: "pending-clinician-review",
+        readingLevelCheck: "not-checked",
+        instructionConsistency: "review-required",
+        medicalJargonFlags: ["glucose tolerance test", "fundal height"],
+        reviewer: "clinician",
+        note: "After-visit summary mentions glucose tolerance timing that is still missing source evidence, so portal release waits on the same clinician review that reconciles the prenatal follow-up plan.",
       },
       reviewTasks: [
         {
@@ -844,6 +860,14 @@ export const clinicalNotes: ClinicalNote[] = [
         ],
         reason:
           "Medication-response monitoring ties the AI-drafted telehealth plan to a patient outcome signal after clinician sign-off.",
+      },
+      patientSummaryRelease: {
+        status: "pending-clinician-review",
+        readingLevelCheck: "within-target",
+        instructionConsistency: "review-required",
+        medicalJargonFlags: ["famotidine", "PPI", "H2 blocker"],
+        reviewer: "clinician",
+        note: "Patient instructions describe continuing a morning acid reducer, but the active medication list has no matching entry; keep the summary out of the portal until the medication discrepancy is resolved.",
       },
       reviewTasks: [
         {
